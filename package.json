@@ -1,0 +1,16 @@
+{
+  "name": "black_white_solution",
+  "version": "1.0.0",
+  "description": "Solución del problema ES",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Edilson Gonzalez & Josue Rojas",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4"
+  }
+}
