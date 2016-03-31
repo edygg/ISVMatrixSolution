@@ -50,13 +50,19 @@ module.exports = function(grunt) {
           {
             expand: true,
             cwd: 'bower_components/angular-messages',
-            src: 'angular-aria.min.js',
+            src: 'angular-messages.min.js',
             dest: 'assets/js/',
           },
           {
             expand: true,
             cwd: 'bower_components/angular-material',
             src: 'angular-material.min.js',
+            dest: 'assets/js/',
+          },
+          {
+            expand: true,
+            cwd: 'bower_components/angular-ui-router/release',
+            src: 'angular-ui-router.min.js',
             dest: 'assets/js/',
           },
         ],

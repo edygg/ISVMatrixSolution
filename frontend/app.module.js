@@ -1,3 +1,1 @@
-var app = angular.module('ISVMatrixSolution', ['ngMaterial']);
-
-app.controller('');
+var app = angular.module('ISVMatrixSolution', ['ngMaterial', 'ui.router', 'ngMessages']);
