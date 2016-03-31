@@ -1,0 +1,23 @@
+{
+  "name": "ISVMatrixSolution",
+  "description": "Solución del problema ES",
+  "main": "index.js",
+  "authors": [
+    "Edilson Gonzalez & Josue Rojas"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/efgm1024/ISVMatrixSolution",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-material": "^1.0.6",
+    "requirejs": "^2.2.0"
+  }
+}
