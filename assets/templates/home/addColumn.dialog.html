@@ -1,0 +1,23 @@
+<md-dialog ng-cloak>
+	<form>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Agregar Nueva Columna</h2>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="newColumnDialogContent">
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>Nombre de Columna</label>
+				<input ng-model="columnName">
+				<md-checkbox ng-model="isReturnValue" class="top-margin">
+					¿Es valor de retorno? 
+				</md-checkbox>
+			</md-input-container>
+		</md-dialog-content>
+		<md-dialog-actions layout="row">
+			<span flex></span>
+			<md-button ng-click="hide()">Cancelar</md-button>
+			<md-button ng-click="answer()">Agregar</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>
