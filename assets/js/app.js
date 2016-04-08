@@ -94,14 +94,108 @@ app.controller('HomeController', ['$http', '$mdDialog', function($http, $mdDialo
 
 
 	this.deleteRule = function(index){
-		//			>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>		FALTA DIALOGO DE CONFIRMACION
-		console.log(index);
-		this.rules.splice(index, 1);
+		var _self = this;
+		if (_self.rules.length > 1){
+			var confirm = $mdDialog.confirm()
+				.title('Eliminar Regla')
+				.textContent('¿Desea eliminar esta regla?')
+				.ariaLabel('Lucky day')
+				.ok('Eliminar')
+				.cancel('Cancelar');
+			$mdDialog.show(confirm).then(function() {
+				_self.rules.splice(index, 1);
+			}, function() {});
+		} else {
+			$mdDialog.show(
+				$mdDialog.alert()
+					.parent(angular.element(document.body))
+					.clickOutsideToClose(true)
+					.title('No Se Puede Eliminar Regla')
+					.textContent('No se puede elminar porque debe de existir al menos una regla')
+					.ariaLabel('Alert Dialog Demo')
+					.ok('Aceptar')
+					.targetEvent()
+			);
+		}
 	}
 
+
 	this.copyRule = function(index, rule){
-		this.rules.splice(index, 0, rule);
+		this.rules.splice(index, 0, jQuery.extend(true, {}, rule));
+	}
+
+
+	this.printRules = function(){
+		console.log(this.rules);
+	}
+
+
+	this.addRule = function(){
+		var newRule = {
+			columns: {},
+			result: {}
+		};
+		Object.keys(this.rules[0].columns).forEach(function(column){
+			newRule.columns[column] = "";
+		});
+		Object.keys(this.rules[0].result).forEach(function(column){
+			newRule.result[column] = "";
+		});
+		this.rules.push(newRule);
+	}
+
+
+	this.deleteColumn = function(columnName, columnType){
+		var _self = this;
+
+		if (columnType == 'result' && Object.keys(_self.rules[0].result).length < 2 ){
+			$mdDialog.show(
+				$mdDialog.alert()
+					.parent(angular.element(document.body))
+					.clickOutsideToClose(true)
+					.title('No Se Puede Eliminar Columna')
+					.textContent('No se puede elminar porque debe de existir al menos una columna de valor de retorno.')
+					.ariaLabel('Alert Dialog Demo')
+					.ok('Aceptar')
+					.targetEvent()
+			);
+		} else if (columnType == 'column' && Object.keys(_self.rules[0].columns).length < 2 ){
+			$mdDialog.show(
+				$mdDialog.alert()
+					.parent(angular.element(document.body))
+					.clickOutsideToClose(true)
+					.title('No Se Puede Eliminar Columna')
+					.textContent('No se puede elminar porque debe de existir al menos una columna de valor de consulta.')
+					.ariaLabel('Alert Dialog Demo')
+					.ok('Aceptar')
+					.targetEvent()
+			);
+		} else {
+			var confirm = $mdDialog.confirm()
+				.title('Eliminar Columna')
+				.textContent('¿Desea eliminar esta columna?')
+				.ariaLabel('Lucky day')
+				.ok('Eliminar')
+				.cancel('Cancelar');
+			$mdDialog.show(confirm).then(function() {
+				if (columnType == 'result'){
+					$.each(_self.rules, function(index, value) {
+						delete value.result[columnName];
+					});
+				} else {
+					$.each(_self.rules, function(index, value) {
+						delete value.columns[columnName];
+					});
+				}
+			}, function() {});
+		}
+
+
+
 	}
 
 
 }]);
+
+
+
