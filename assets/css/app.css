@@ -6,7 +6,7 @@
 }
 
 
-body {
+#app-wrapper, body {
 	background-color: #DAEFF3;
 }
 
@@ -18,6 +18,7 @@ body {
 
 #rules-table {
 	width: 100%;
+	overflow-x: auto;
 }
 
 
@@ -60,12 +61,21 @@ th, td {
 .actionsColumnHeader {
 	background-color: #B2DFDB;
 	width: 172px;
+	min-width: 172px;
 }
 
 
 .newColumnDialogContent {
 	padding: 40px;
 	padding-bottom: 0px;
+	padding-top: 20px;
+	width: 400px;
+}
+
+
+.SAPDialogContent {
+	padding: 0px;
+	padding-top: 30px;
 	width: 400px;
 }
 
@@ -112,4 +122,42 @@ th, td {
 
 .md-dialog-container .md-toolbar-tools {
 	background-color: #005B8D;
+}
+
+
+.up-down-space {
+	margin-top: 20px;
+	margin-bottom: 40px;
+}
+
+
+.dialog-rule-row {
+	height: 70px;
+}
+
+
+.dialog-rule-result-row {
+	height: 40px;
+	margin-bottom: 20px;
+}
+
+
+.input-in-table {
+	font-size: 0.6em;
+}
+
+
+#rules-table-container {
+	overflow-x: auto;
+}
+
+
+.sap-toolbar-icon {
+	width: 50px;
+	height: 40px;
+	margin-right: 7px;
+}
+
+.dialog-text {
+	margin-bottom: 30px;
 }

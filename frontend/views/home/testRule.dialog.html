@@ -1,0 +1,34 @@
+<md-dialog ng-cloak>
+	<form>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Probar Regla</h2>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="SAPDialogContent">
+
+
+			<div class="dialog-rule-row" layout="row" layout-align="center" ng-repeat="(title, value) in TR.rule.columns">
+				<span flex></span>
+				<md-input-container flex="70">
+					<label>{{title}}</label>
+					<input ng-model="TR.rule.columns[title]">
+				</md-input-container>
+				<span flex></span>
+			</div>
+
+			<div layout="row" layout-align="center">
+				<md-button class="md-primary md-hue-1 sap-text" ng-click="TR.callEndpoint()">Enviar Petición</md-button>
+			</div>
+
+			<div layout="row" layout-align="center" ng-if="TR.requestInProgress">
+				Enviando solicitud al servidor...
+			</div>
+
+		</md-dialog-content>
+		<md-dialog-actions layout="row">
+			<span flex></span>
+			<md-button ng-click="TR.hide()">Cerrar</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

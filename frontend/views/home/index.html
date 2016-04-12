@@ -1,64 +1,81 @@
-<md-toolbar>
-	<div class="md-toolbar-tools sap-toolbar">
-		<h2><span>Rules Editor - Matriz de Impuestos CONFIA</span></h2>
+
+<div layout-fill id="app-wrapper">
+
+	<md-toolbar>
+		<div class="md-toolbar-tools sap-toolbar">
+			<md-icon class="sap-toolbar-icon" md-svg-icon="icons/SAP_logo.svg"></md-icon>
+			<h2><span>Rules Editor - Matriz de Impuestos CONFIA</span></h2>
+			<span flex></span>
+		</div>
+	</md-toolbar>
+
+
+	<div layout="row" layout-padding>
+		<span flex></span>
+		<p id="instructions" flex="70">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et elit auctor risus finibus egestas non ac dui. Sed et dui id felis tristique luctus. Donec iaculis efficitur odio vitae interdum. Donec ullamcorper odio at ante cursus, vitae congue leo commodo.</p>
 		<span flex></span>
 	</div>
-</md-toolbar>
 
 
-<div layout="row" layout-padding>
-	<span flex></span>
-	<p id="instructions" flex="70">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et elit auctor risus finibus egestas non ac dui. Sed et dui id felis tristique luctus. Donec iaculis efficitur odio vitae interdum. Donec ullamcorper odio at ante cursus, vitae congue leo commodo. Fusce accumsan lacinia mi sed semper. Donec interdum semper eros, ac semper neque vehicula nec. Curabitur et gravida diam. Duis posuere velit et diam faucibus tincidunt.</p>
-	<span flex></span>
-</div>
-
-
-<div layout="row" layout-align="center">
-	<md-button class="md-raised md-primary sap-button" ng-click="homeCtrl.newColumnDialog($event)">Agregar Columna</md-button>
-</div>
-
-
-<div layout="row">
-	<span flex></span>  
-	<table flex="70" id="rules-table" class="top-margin">
-		<tr>
-			<th class="ColumnHeader" ng-repeat="(title, value) in homeCtrl.rules[0].columns">
-				{{title}}
-				<span class="delete-column" ng-click="homeCtrl.deleteColumn(title, 'column')">
-					[X]
-					<md-tooltip md-visible="false" md-direction="top">Eliminar Columna</md-tooltip>
-				</span>
-			</th>
-			<th class="resultColumnHeader" ng-repeat="(title, value) in homeCtrl.rules[0].result">
-				{{title}}
-				<span class="delete-column" ng-click="homeCtrl.deleteColumn(title, 'result')">
-					[X]
-					<md-tooltip md-visible="false" md-direction="top">Eliminar Columna</md-tooltip>
-				</span>
-  			</th>
-			<th class="actionsColumnHeader">Acciones</th>
-		</tr>
-		<tr ng-repeat="(index, rule) in homeCtrl.rules track by $index">
-			<td ng-repeat="(key, value) in rule.columns">
-				<input layout-fill type="text" ng-model="homeCtrl.rules[index].columns[key]">
-			</td>
-			<td ng-repeat="(key, value) in rule.result">
-				<input layout-fill type="text" ng-model="homeCtrl.rules[index].result[key]">
-			</td>
-			<td>
-				<md-button md-no-ink class="md-primary" ng-click="homeCtrl.copyRule(index, rule)">Copiar</md-button>
-				<md-button class="md-warn" ng-click="homeCtrl.deleteRule(index)">Borrar</md-button>
-			</td>
-		</tr>
-	</table>
-	<span flex></span>
-</div>
-
-<div layout="row">
-	<span flex></span>
-	<div flex="70">
-		<md-button class="md-primary md-hue-1 sap-text" ng-click="homeCtrl.addRule()">Agregar Regla</md-button>
-		<md-button class="md-primary md-hue-1 sap-text" ng-click="homeCtrl.printRules()">Imprimir Reglas</md-button>
+	<div layout="row" layout-align="center">
+		<md-button class="md-raised md-primary sap-button" ng-click="homeCtrl.newColumnDialog($event)">Agregar Columna</md-button>
 	</div>
-	<span flex></span>
+
+
+	<div layout="row">
+		<span flex></span>
+		<div flex="90" id="rules-table-container">
+			<table id="rules-table" class="top-margin">
+				<tr>
+					<th class="ColumnHeader" ng-repeat="(title, value) in homeCtrl.rules[0].columns">
+						{{title}}
+						<span class="delete-column" ng-click="homeCtrl.deleteColumn(title, 'column')">
+							[X]
+							<md-tooltip md-visible="false" md-direction="top">Eliminar Columna</md-tooltip>
+						</span>
+					</th>
+					<th class="resultColumnHeader" ng-repeat="(title, value) in homeCtrl.rules[0].result">
+						{{title}}
+						<span class="delete-column" ng-click="homeCtrl.deleteColumn(title, 'result')">
+							[X]
+							<md-tooltip md-visible="false" md-direction="top">Eliminar Columna</md-tooltip>
+						</span>
+		  			</th>
+					<th class="actionsColumnHeader">Acciones</th>
+				</tr>
+				<tr ng-repeat="(index, rule) in homeCtrl.rules track by $index">
+					<td ng-repeat="(key, value) in rule.columns">
+						<input class="input-in-table" layout-fill type="text" ng-model="homeCtrl.rules[index].columns[key]">
+					</td>
+					<td ng-repeat="(key, value) in rule.result">
+						<input class="input-in-table" layout-fill type="text" ng-model="homeCtrl.rules[index].result[key]">
+					</td>
+					<td>
+						<md-button md-no-ink class="md-primary" ng-click="homeCtrl.copyRule(index, rule)">Copiar</md-button>
+						<md-button class="md-warn" ng-click="homeCtrl.deleteRule(index)">Borrar</md-button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<span flex></span>
+	</div>
+
+	<div layout="row">
+		<span flex></span>
+		<div flex="90">
+			<md-button class="md-primary md-hue-1 sap-text" ng-click="homeCtrl.addRule()">Agregar Regla</md-button>
+			<!--md-button class="md-primary md-hue-1 sap-text" ng-click="homeCtrl.printRules()">Imprimir Reglas</md-button-->
+		</div>
+		<span flex></span>
+	</div>
+
+	<div layout="row" class="up-down-space">
+		<span flex></span>
+		<div flex="40" layout="row" layout-align="center center">
+			<md-button class="md-raised md-primary sap-button" ng-click="homeCtrl.postRules($event)">Publicar Reglas</md-button>
+			<md-button class="md-raised md-primary sap-button" ng-click="homeCtrl.testRule($event)">Probar Reglas</md-button>
+		</div>
+		<span flex></span>
+	</div>
+
 </div>

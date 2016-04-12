@@ -1,0 +1,24 @@
+<md-dialog ng-cloak>
+	<form>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Resultado</h2>
+			</div>
+		</md-toolbar>
+		<md-dialog-content class="SAPDialogContent">
+
+			<div class="dialog-rule-result-row" layout="row" layout-align="center" ng-repeat="(title, value) in result.result.result">
+				<span flex></span>
+				<div flex="70">
+					<b>{{title}}: </b><span class="sap-text">{{value}}</span>
+				</div>
+				<span flex></span>
+			</div>
+
+		</md-dialog-content>
+		<md-dialog-actions layout="row">
+			<span flex></span>
+			<md-button ng-click="hide()">Cerrar</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

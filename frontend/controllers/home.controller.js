@@ -3,21 +3,78 @@ app.controller('HomeController', ['$http', '$mdDialog', function($http, $mdDialo
 
 	this.rules = [{
 		columns: {
-			c1: 'column 1',
-			c2: 'column 2'
+			clasificacionTributaria: '1',
+			contribuyente: 'CONTRIBUYENTE',
+			tipoPersona: 'NATURAL',
+			tipoEmpresa: 'PEQUEÑA EMPRESA',
+			tipoImpuesto: 'GRAVADO',
+			ubicacion: 'LOCAL',
+			tipoArticulo: 'BIEN TANGIBLE',
+			tipoInventario: ''
 		},
 		result: {
-			r1: 'result 1',
-			r2: 'result 2',
+			renta: 'N/A',
+			retencionIVA: 'B5'
 		}
 	},{
 		columns: {
-			c1: 'A 1',
-			c2: 'B 2'
+			clasificacionTributaria: '3',
+			contribuyente: 'CONTRIBUYENTE',
+			tipoPersona: 'NATURAL',
+			tipoEmpresa: 'GRAN EMPRESA',
+			tipoImpuesto: 'GRAVADO',
+			ubicacion: 'LOCAL',
+			tipoArticulo: 'SERVICIO',
+			tipoInventario: 'ALQUILER/ARRENDAMIENTO'
 		},
 		result: {
-			r1: 'C 1',
-			r2: 'D 2',
+			renta: 'N/A',
+			retencionIVA: 'B5'
+		}
+	},{
+		columns: {
+			clasificacionTributaria: '7',
+			contribuyente: 'CONTRIBUYENTE',
+			tipoPersona: 'JURIDICO',
+			tipoEmpresa: 'PEQUEÑA EMPRESA',
+			tipoImpuesto: 'GRAVADO',
+			ubicacion: 'LOCAL',
+			tipoArticulo: 'DONACIÓN',
+			tipoInventario: ''
+		},
+		result: {
+			renta: 'N/A',
+			retencionIVA: 'N/A'
+		}
+	},{
+		columns: {
+			clasificacionTributaria: '9',
+			contribuyente: 'CONTRIBUYENTE',
+			tipoPersona: 'JURIDICO',
+			tipoEmpresa: 'GRAN EMPRESA',
+			tipoImpuesto: 'GRAVADO',
+			ubicacion: 'LOCAL',
+			tipoArticulo: 'BIEN INTANGIBLE',
+			tipoInventario: ''
+		},
+		result: {
+			renta: 'R4',
+			retencionIVA: 'N/A'
+		}
+	},{
+		columns: {
+			clasificacionTributaria: '10',
+			contribuyente: 'NO CONTRIBUYENTE',
+			tipoPersona: 'NATURAL',
+			tipoEmpresa: 'EXCLUIDO',
+			tipoImpuesto: 'N/A',
+			ubicacion: 'NO DOMICILIADO',
+			tipoArticulo: 'SERVICIO',
+			tipoInventario: 'ALQUILER/ARRENDAMIENTO'
+		},
+		result: {
+			renta: 'R2',
+			retencionIVA: 'N/A'
 		}
 	}];
 
@@ -61,7 +118,10 @@ app.controller('HomeController', ['$http', '$mdDialog', function($http, $mdDialo
 		};
 
 		$scope.answer = function(answer) {
-			$mdDialog.hide({columnName: $scope.columnName, isReturnValue: $scope.isReturnValue});
+			$scope.columnName = $scope.columnName.replace(" ", "");
+			if ($scope.columnName != ""){
+				$mdDialog.hide({columnName: $scope.columnName, isReturnValue: $scope.isReturnValue});
+			}
 		};
 	}
 
@@ -162,13 +222,37 @@ app.controller('HomeController', ['$http', '$mdDialog', function($http, $mdDialo
 				}
 			}, function() {});
 		}
+	}
 
 
+	this.postRules = function(){
+		var confirm = $mdDialog.confirm()
+			.title('Publicar Reglas')
+			.textContent('¿Desea publicar estas reglas en el servidor?')
+			.ariaLabel('Lucky day')
+			.ok('Publicar')
+			.cancel('Cancelar');
+		$mdDialog.show(confirm).then(function() {
+			console.log("Publicar Reglas...");
+		}, function() {
+			// Cancelar
+		});
+	}
 
+
+	this.testRule = function(ev){
+		var _self = this;
+		
+		$mdDialog.show({
+			controller: 'testRule',
+			controllerAs: 'TR',
+			templateUrl: '/templates/home/testRule.dialog.html',
+			parent: angular.element(document.body),
+			targetEvent: ev,
+			clickOutsideToClose: true
+		})
+		.then(function(answer) {}, function() {});
 	}
 
 
 }]);
-
-
-

@@ -6,9 +6,10 @@
 			</div>
 		</md-toolbar>
 		<md-dialog-content class="newColumnDialogContent">
+			<p class="dialog-text">Los nombres de columnas no pueden ser vacíos o contener espacios en blanco.</p>
 			<md-input-container class="md-block" flex-gt-sm>
 				<label>Nombre de Columna</label>
-				<input ng-model="columnName">
+				<input required md-no-asterisk name="columnName" ng-pattern="/^(\S)+$/" ng-model="columnName">
 				<md-checkbox ng-model="isReturnValue" class="top-margin">
 					¿Es valor de retorno? 
 				</md-checkbox>
