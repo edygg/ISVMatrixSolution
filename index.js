@@ -1,6 +1,19 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 var app = express();
+
+// Database config
+var dbConfig = require('./config/database.config');
+var stringConnection = 'mongodb://';
+
+if (dbConfig.username && dbConfig.password) {
+  stringConnection += dbConfig.username + ':' + dbConfig.password + '@';
+}
+
+stringConnection += dbConfig.host + ':' + dbConfig.port + '/' + dbConfig.database;
+
+mongoose.connect(stringConnection);
 
 // Routers
 var homeRouter = require('./routes/home.router');
@@ -14,7 +27,9 @@ app.set('view engine', 'ejs');
 app.use('/', homeRouter);
 app.use('/api', apiRouter);
 
-var port = 3000;
+//App config
+var appConfig = require('./config/app.config');
+var port = appConfig.port || 3000;
 
 app.listen(port, function () {
   console.log('app listening on port ' + port + '!');

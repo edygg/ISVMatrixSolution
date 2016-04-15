@@ -1,4 +1,6 @@
 var express = require('express');
+var mongoose = require('mongoose');
+var Rule = require('../models/rule');
 var router = express.Router();
 
 router.post('/', function (req, res) {
@@ -36,6 +38,11 @@ router.post('/', function (req, res) {
   }
 
   res.json(transformObject);
+});
+
+router.get('/', function(req, res) {
+  var neoRule = new Rule({columns: { c1: 'a' }, result: { r1: 'a' }});
+  res.json(neoRule);
 });
 
 module.exports = router;
