@@ -119,4 +119,39 @@ router.post('/rules', function(req, res) {
   res.json({status: "ok"});
 });
 
+router.get('/rules', function(req, res) {
+  Rule.find({}).select("columns result").exec(function(err, rules) {
+    if (err) {
+      res.status(500);
+      res.json({ errors: ["Error al obtener la lista actual de reglas."] });
+    }
+
+    res.status(200);
+    res.json(rules);
+  });
+});
+
+router.get('/rules/new', function(req, res) {
+  Rule.findOne({}).select('columns result -_id').exec(function(err, rule) {
+    if (err) {
+      res.status(500);
+      res.json({ errors: ["Error al obtener el esquema del nuevo objeto."] });
+    }
+
+    var columns = Object.keys(rule.columns);
+    var result = Object.keys(rule.result);
+
+    for (var i = 0; i < columns.length; i++) {
+      rule['columns'][columns[i]] = '';
+    }
+
+    for (var i = 0; i < result.length; i++) {
+      rule['result'][result[i]] = '';
+    }
+
+    res.status(200);
+    res.json(rule);
+  });
+});
+
 module.exports = router;
