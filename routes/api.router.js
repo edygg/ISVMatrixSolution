@@ -109,13 +109,14 @@ router.post('/rules', function(req, res) {
           insertingRulesCallback(index + 1, array)
         }
       });
+    } else  {
+      res.status(200);
+      res.json({status: "ok"});
     }
   };
 
   Rule.remove({}, function(err) {
     insertingRulesCallback(0, rulesArray);
-    res.status(200);
-    res.json({status: "ok"});
   });
 });
 
