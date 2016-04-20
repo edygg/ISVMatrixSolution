@@ -114,10 +114,9 @@ router.post('/rules', function(req, res) {
 
   Rule.remove({}, function(err) {
     insertingRulesCallback(0, rulesArray);
+    res.status(200);
+    res.json({status: "ok"});
   });
-
-  res.status(200);
-  res.json({status: "ok"});
 });
 
 router.get('/rules', function(req, res) {
