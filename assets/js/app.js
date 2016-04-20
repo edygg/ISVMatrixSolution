@@ -193,7 +193,6 @@ app.controller('HomeController', ['$http', '$mdDialog', '$mdToast', function($ht
 			.ok('Publicar')
 			.cancel('Cancelar');
 		$mdDialog.show(confirm).then(function() {
-			console.log("PAPI");
 			$http.post('/api/rules', _self.rules, {timeout: 30000})
 			.then(function(response) {
 				$mdToast.show($mdToast.simple().textContent("Reglas guardadas."));
@@ -230,23 +229,14 @@ app.controller('testRule', ['$http', '$mdDialog', function($http, $mdDialog) {
 	var _self = this;
 
 	this.rule = {};
+	this.result = {};
 
-	$http.get('/api/rules/new')
+	$http.get('/api/rules/new', {timeout: 30000})
 		.then(function(response) {
 			_self.rule = response.data
-		})
-		.catch(function(error) {
+		}, function(error) {
 			$mdToast.show($mdToast.simple().textContent("Ha ocurrido un error al cargar la regla."));
 		});
-
-
-	this.result = {
-		result: {
-			tipoImpuesto: 'X3',
-			nombreImpuesto: 'Ajuste de Movimientos',
-			tipoISV: 'H1',
-		}
-	}
 
 
 	this.hide = function(){
@@ -255,34 +245,34 @@ app.controller('testRule', ['$http', '$mdDialog', function($http, $mdDialog) {
 
 
 	this.callEndpoint = function(){
-		var _self = this;
-
 		this.requestInProgress = true;
-		console.log(this.rule);
-
-		// Llamado a EndPoint
-		$mdDialog.hide();
-		$mdDialog.show({
-			controller: DialogController,
-			templateUrl: '/templates/home/testRuleResult.dialog.html',
-			parent: angular.element(document.body),
-			clickOutsideToClose: true
-		})
-		.then(function() {}, function() {});
-
+		$http.post('/api/rules/get_result', _self.rule.columns, {timeout: 30000})
+		.then(function(response) {
+			_self.result = response.data;
+			$mdDialog.hide();
+			$mdDialog.show({
+				controller: DialogController,
+				templateUrl: '/templates/home/testRuleResult.dialog.html',
+				parent: angular.element(document.body),
+				clickOutsideToClose: true
+			}).then(function() {}, function() {});
+			this.requestInProgress = false;
+		}, function(error) {
+			$mdToast.show($mdToast.simple().textContent("Ha ocurrido un error al cargar la regla."));
+		});
 	};
-
-
-	this.requestInProgress = false;
 
 
 	function DialogController($scope, $mdDialog) {
 		$scope.result = _self;
 
+		$scope.empty = function(){
+			return jQuery.isEmptyObject(_self.result);
+		}
+
 		$scope.hide = function() {
 			$mdDialog.hide();
 		};
-
 	}
 
 

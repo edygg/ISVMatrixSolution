@@ -7,11 +7,17 @@
 		</md-toolbar>
 		<md-dialog-content class="SAPDialogContent">
 
-			<div class="dialog-rule-result-row" layout="row" layout-align="center" ng-repeat="(title, value) in result.result.result">
+			<div class="dialog-rule-result-row" layout="row" layout-align="center" ng-repeat="(title, value) in result.result">
 				<span flex></span>
 				<div flex="70">
 					<b>{{title}}: </b><span class="sap-text">{{value}}</span>
 				</div>
+				<span flex></span>
+			</div>
+
+			<div class="dialog-rule-result-row" layout="row" layout-align="center center" ng-if="empty()">
+				<span flex></span>
+				<div style="text-align: center;" flex="70" layout-align="center center">No se encontraron resultados.</div>
 				<span flex></span>
 			</div>
 

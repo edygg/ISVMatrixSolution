@@ -166,7 +166,6 @@ app.controller('HomeController', ['$http', '$mdDialog', '$mdToast', function($ht
 			.ok('Publicar')
 			.cancel('Cancelar');
 		$mdDialog.show(confirm).then(function() {
-			console.log("PAPI");
 			$http.post('/api/rules', _self.rules, {timeout: 30000})
 			.then(function(response) {
 				$mdToast.show($mdToast.simple().textContent("Reglas guardadas."));
