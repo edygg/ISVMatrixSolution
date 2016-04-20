@@ -1,6 +1,8 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var Rule = require('../models/rule');
+var Validator = require('jsonschema').Validator;
+
 var router = express.Router();
 
 router.post('/', function (req, res) {
@@ -40,9 +42,81 @@ router.post('/', function (req, res) {
   res.json(transformObject);
 });
 
-router.get('/', function(req, res) {
-  var neoRule = new Rule({columns: { c1: 'a' }, result: { r1: 'a' }});
-  res.json(neoRule);
+router.post('/rules', function(req, res) {
+  var validator = new Validator();
+  var errorObject = { errors: [] };
+
+  var objectSchemaValidator = {
+    "id": "/SimpleObject",
+    "type": "object"
+  };
+
+  var ruleSchemaValidator = {
+    "id": "/Rule",
+    "type": "object",
+    "properties": {
+      "columns": { "$ref": "/SimpleObject" },
+      "result": { "$ref": "/SimpleObject" },
+    },
+    "required": ["columns", "result"]
+  };
+
+  validator.addSchema(objectSchemaValidator, '/SimpleObject');
+
+  var rulesArray = req.body
+  var rulesValidation = validator.validate(rulesArray, { "type": "array" })
+
+  if (rulesValidation.errors.length > 0) {
+    res.status(422);
+    errorObject.errors.push("Se esperaba un arreglo como parámetro.");
+    res.json(errorObject);
+  }
+
+  var hasErrors = false;
+  for (var i = 0; i < rulesArray.length; i++) {
+    var rule = rulesArray[i];
+    var ruleValidation = validator.validate(rule, ruleSchemaValidator);
+
+    if (ruleValidation.errors.length > 0) {
+      hasErrors = true;
+      res.status(422);
+      errorObject.errors.push("La regla " + i + " no cumple con el esquema JSON.");
+    }
+  }
+
+  if (hasErrors) {
+    res.json(errorObject);
+  }
+  // removing all rules
+  var insertingRulesCallback = function(index, array) {
+    if (index < array.length) {
+      var rule = array[index];
+      var query = Rule.find({});
+      for (var key in Object.keys(rule)) {
+        query = query.where('columns.' + key).equals(rule[key])
+      }
+      query.exec(function(err, duplicateRule) {
+        if (err) {
+          res.status(500);
+          errorObject.errors.push("No es posible actualizar la lista de reglas");
+          res.json(errorObject);
+        }
+
+        if (duplicateRule.length <= 0) {
+          var neoRule = new Rule(rule);
+          neoRule.save();
+          insertingRulesCallback(index + 1, array)
+        }
+      });
+    }
+  };
+
+  Rule.remove({}, function(err) {
+    insertingRulesCallback(0, rulesArray);
+  });
+
+  res.status(200);
+  res.json({status: "ok"});
 });
 
 module.exports = router;

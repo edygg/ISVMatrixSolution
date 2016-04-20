@@ -19,6 +19,7 @@ mongoose.connect(stringConnection);
 var homeRouter = require('./routes/home.router');
 var apiRouter = require('./routes/api.router');
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('assets'));
 app.set('views', __dirname + '/frontend/views');

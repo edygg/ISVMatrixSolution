@@ -6,4 +6,6 @@ var RuleSchema = new Schema({
   result: Schema.Types.Mixed
 });
 
-mongoose.model('Rule', RuleSchema);
+var ruleModel = mongoose.model('Rule', RuleSchema);
+
+module.exports = ruleModel; 
