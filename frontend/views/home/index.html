@@ -3,9 +3,15 @@
 
 	<md-toolbar>
 		<div class="md-toolbar-tools sap-toolbar">
-			<md-icon class="sap-toolbar-icon" md-svg-icon="icons/SAP_logo.svg"></md-icon>
-			<h2><span>Rules Editor - Matriz de Impuestos CONFIA</span></h2>
+			<img src="icons/confia.png" class="confia-toolbar-icon">
+			<h2><span>Editor de Reglas - Matriz de Impuestos CONFIA</span></h2>
 			<span flex></span>
+			<md-button ng-if="homeCtrl.rules.length" class="md-primary md-hue-1 sap-text" ng-click="homeCtrl.testRule($event)">
+				Probar Reglas
+			</md-button>
+			<md-button ng-if="homeCtrl.rules.length" class="md-primary md-hue-1 sap-text" ng-click="homeCtrl.postRules($event)">
+				Publicar Reglas
+			</md-button>
 		</div>
 	</md-toolbar>
 
@@ -17,15 +23,10 @@
 	</div>
 
 
-	<div layout="row" layout-align="center">
-		<md-button class="md-raised md-primary sap-button" ng-click="homeCtrl.newColumnDialog($event)">Agregar Columna</md-button>
-	</div>
-
-
 	<div layout="row">
 		<span flex></span>
 		<div flex="90" id="rules-table-container">
-			<table id="rules-table" class="top-margin">
+			<table id="rules-table" ng-if="homeCtrl.rules.length">
 				<tr>
 					<th class="ColumnHeader" ng-repeat="(title, value) in homeCtrl.rules[0].columns">
 						{{title}}
@@ -56,24 +57,24 @@
 					</td>
 				</tr>
 			</table>
+			<div ng-if="homeCtrl.rules.length == 0" layout="row" layout-align="center center">
+				<br><br><br>
+				<img src="icons/loading.gif" height="42" width="42">
+			</div>
+			<div ng-if="homeCtrl.rules.length == 0" layout="row" layout-align="center center">
+				<br>
+				Cargando Reglas...
+			</div>
 		</div>
 		<span flex></span>
 	</div>
 
-	<div layout="row">
+	<div layout="row" ng-if="homeCtrl.rules.length">
 		<span flex></span>
 		<div flex="90">
+			<md-button class="md-primary md-hue-1 sap-text" ng-click="homeCtrl.newColumnDialog($event)">Agregar Columna</md-button>
 			<md-button class="md-primary md-hue-1 sap-text" ng-click="homeCtrl.addRule()">Agregar Regla</md-button>
 			<!--md-button class="md-primary md-hue-1 sap-text" ng-click="homeCtrl.printRules()">Imprimir Reglas</md-button-->
-		</div>
-		<span flex></span>
-	</div>
-
-	<div layout="row" class="up-down-space">
-		<span flex></span>
-		<div flex="40" layout="row" layout-align="center center">
-			<md-button class="md-raised md-primary sap-button" ng-click="homeCtrl.postRules($event)">Publicar Reglas</md-button>
-			<md-button class="md-raised md-primary sap-button" ng-click="homeCtrl.testRule($event)">Probar Reglas</md-button>
 		</div>
 		<span flex></span>
 	</div>

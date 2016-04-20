@@ -13,6 +13,8 @@
 
 #instructions {
 	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 
@@ -160,4 +162,11 @@ th, td {
 
 .dialog-text {
 	margin-bottom: 30px;
+}
+
+
+.confia-toolbar-icon {
+	height: 40px;
+	width: 137px;
+	margin-right: 16px;
 }

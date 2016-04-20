@@ -5,11 +5,10 @@ app.controller('HomeController', ['$http', '$mdDialog', '$mdToast', function($ht
 
 	
 	this.refreshRules = function(){
-		$http.get('/api/rules')
+		$http.get('/api/rules', {timeout: 30000})
 		.then(function(response) {
-			_self.rules = response.data
-		})
-		.catch(function(error) {
+			_self.rules = response.data;
+		}, function(){
 			$mdToast.show($mdToast.simple().textContent("Ha ocurrido un error al cargar las reglas."));
 		});
 	}	
@@ -40,9 +39,7 @@ app.controller('HomeController', ['$http', '$mdDialog', '$mdToast', function($ht
 
 
 	function DialogController($scope, $mdDialog) {
-
 		$scope.columnName = "";
-
 		$scope.isReturnValue = false;
 
 		$scope.hide = function() {
@@ -96,7 +93,6 @@ app.controller('HomeController', ['$http', '$mdDialog', '$mdToast', function($ht
 
 	this.printRules = function(){
 		console.log(this.rules);
-		$http.get('/api/rules').then(function(response) { console.log(response) });
 	}
 
 
@@ -170,14 +166,13 @@ app.controller('HomeController', ['$http', '$mdDialog', '$mdToast', function($ht
 			.ok('Publicar')
 			.cancel('Cancelar');
 		$mdDialog.show(confirm).then(function() {
-			$http.post('/api/rules', _self.rules)
+			$http.post('/api/rules', _self.rules, {timeout: 30000})
 			.then(function(response) {
 				$mdToast.show($mdToast.simple().textContent("Reglas guardadas."));
 				_self.refreshRules();
-			})
-			.catch(function(error){
+			}, function(error){
 				$mdToast.show($mdToast.simple().textContent("Ha ocurrido un error al guardar las reglas."));
-			});
+			})
 		}, function() {
 			// Cancelar
 		});
