@@ -25,85 +25,21 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', functi
   /* <<<<<<<<<<<<<<<<<< Theming <<<<<<<<<<<<<<<<<< */
 }]);
 
-app.controller('HomeController', ['$http', '$mdDialog', function($http, $mdDialog) {
+app.controller('HomeController', ['$http', '$mdDialog', '$mdToast', function($http, $mdDialog, $mdToast) {
 
+	var _self = this;
+	this.rules = [];
 
-	this.rules = [{
-		columns: {
-			clasificacionTributaria: '1',
-			contribuyente: 'CONTRIBUYENTE',
-			tipoPersona: 'NATURAL',
-			tipoEmpresa: 'PEQUEÑA EMPRESA',
-			tipoImpuesto: 'GRAVADO',
-			ubicacion: 'LOCAL',
-			tipoArticulo: 'BIEN TANGIBLE',
-			tipoInventario: ''
-		},
-		result: {
-			renta: 'N/A',
-			retencionIVA: 'B5'
-		}
-	},{
-		columns: {
-			clasificacionTributaria: '3',
-			contribuyente: 'CONTRIBUYENTE',
-			tipoPersona: 'NATURAL',
-			tipoEmpresa: 'GRAN EMPRESA',
-			tipoImpuesto: 'GRAVADO',
-			ubicacion: 'LOCAL',
-			tipoArticulo: 'SERVICIO',
-			tipoInventario: 'ALQUILER/ARRENDAMIENTO'
-		},
-		result: {
-			renta: 'N/A',
-			retencionIVA: 'B5'
-		}
-	},{
-		columns: {
-			clasificacionTributaria: '7',
-			contribuyente: 'CONTRIBUYENTE',
-			tipoPersona: 'JURIDICO',
-			tipoEmpresa: 'PEQUEÑA EMPRESA',
-			tipoImpuesto: 'GRAVADO',
-			ubicacion: 'LOCAL',
-			tipoArticulo: 'DONACIÓN',
-			tipoInventario: ''
-		},
-		result: {
-			renta: 'N/A',
-			retencionIVA: 'N/A'
-		}
-	},{
-		columns: {
-			clasificacionTributaria: '9',
-			contribuyente: 'CONTRIBUYENTE',
-			tipoPersona: 'JURIDICO',
-			tipoEmpresa: 'GRAN EMPRESA',
-			tipoImpuesto: 'GRAVADO',
-			ubicacion: 'LOCAL',
-			tipoArticulo: 'BIEN INTANGIBLE',
-			tipoInventario: ''
-		},
-		result: {
-			renta: 'R4',
-			retencionIVA: 'N/A'
-		}
-	},{
-		columns: {
-			clasificacionTributaria: '10',
-			contribuyente: 'NO CONTRIBUYENTE',
-			tipoPersona: 'NATURAL',
-			tipoEmpresa: 'EXCLUIDO',
-			tipoImpuesto: 'N/A',
-			ubicacion: 'NO DOMICILIADO',
-			tipoArticulo: 'SERVICIO',
-			tipoInventario: 'ALQUILER/ARRENDAMIENTO'
-		},
-		result: {
-			renta: 'R2',
-			retencionIVA: 'N/A'
-		}
-	}];
+	
+	this.refreshRules = function(){
+		$http.get('/api/rules')
+		.then(function(response) {
+			_self.rules = response.data
+		})
+		.catch(function(error) {
+			$mdToast.show($mdToast.simple().textContent("Ha ocurrido un error al cargar las reglas."));
+		});
+	}	
 
 
 	this.newColumnDialog = function(ev){
@@ -187,6 +123,7 @@ app.controller('HomeController', ['$http', '$mdDialog', function($http, $mdDialo
 
 	this.printRules = function(){
 		console.log(this.rules);
+		$http.get('/api/rules').then(function(response) { console.log(response) });
 	}
 
 
@@ -260,7 +197,14 @@ app.controller('HomeController', ['$http', '$mdDialog', function($http, $mdDialo
 			.ok('Publicar')
 			.cancel('Cancelar');
 		$mdDialog.show(confirm).then(function() {
-			console.log("Publicar Reglas...");
+			$http.post('/api/rules', _self.rules)
+			.then(function(response) {
+				$mdToast.show($mdToast.simple().textContent("Reglas guardadas."));
+				_self.refreshRules();
+			})
+			.catch(function(error){
+				$mdToast.show($mdToast.simple().textContent("Ha ocurrido un error al guardar las reglas."));
+			});
 		}, function() {
 			// Cancelar
 		});
@@ -282,18 +226,22 @@ app.controller('HomeController', ['$http', '$mdDialog', function($http, $mdDialo
 	}
 
 
+	this.refreshRules();
+
+
 }]);
 app.controller('testRule', ['$http', '$mdDialog', function($http, $mdDialog) {
 	var _self = this;
 
-	this.rule = {
-		columns: {
-			tipoEmpresa: '',
-			tamanoProducto: '',
-			periodoFical: '',
-			consulta1: ''
-		}
-	};
+	this.rule = {};
+
+	$http.get('/api/rules/new')
+		.then(function(response) {
+			_self.rule = response.data
+		})
+		.catch(function(error) {
+			$mdToast.show($mdToast.simple().textContent("Ha ocurrido un error al cargar la regla."));
+		});
 
 
 	this.result = {
@@ -333,9 +281,6 @@ app.controller('testRule', ['$http', '$mdDialog', function($http, $mdDialog) {
 
 
 	function DialogController($scope, $mdDialog) {
-
-		console.log(_self);
-
 		$scope.result = _self;
 
 		$scope.hide = function() {

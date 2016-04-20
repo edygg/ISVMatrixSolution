@@ -1,14 +1,15 @@
 app.controller('testRule', ['$http', '$mdDialog', function($http, $mdDialog) {
 	var _self = this;
 
-	this.rule = {
-		columns: {
-			tipoEmpresa: '',
-			tamanoProducto: '',
-			periodoFical: '',
-			consulta1: ''
-		}
-	};
+	this.rule = {};
+
+	$http.get('/api/rules/new')
+		.then(function(response) {
+			_self.rule = response.data
+		})
+		.catch(function(error) {
+			$mdToast.show($mdToast.simple().textContent("Ha ocurrido un error al cargar la regla."));
+		});
 
 
 	this.result = {
@@ -48,9 +49,6 @@ app.controller('testRule', ['$http', '$mdDialog', function($http, $mdDialog) {
 
 
 	function DialogController($scope, $mdDialog) {
-
-		console.log(_self);
-
 		$scope.result = _self;
 
 		$scope.hide = function() {
