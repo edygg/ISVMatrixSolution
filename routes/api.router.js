@@ -92,8 +92,9 @@ router.post('/rules', function(req, res) {
     if (index < array.length) {
       var rule = array[index];
       var query = Rule.find({});
-      for (var key in Object.keys(rule)) {
-        query = query.where('columns.' + key).equals(rule[key])
+      var keys = Object.keys(rule.columns);
+      for (var i = 0; i < keys.length; i++) {
+        query = query.where('columns.' + keys[i]).equals(rule['columns'][keys[i]]);
       }
       query.exec(function(err, duplicateRule) {
         if (err) {
@@ -146,6 +147,33 @@ router.get('/rules/new', function(req, res) {
 
     res.status(200);
     res.json(rule);
+  });
+});
+
+router.post('/rules/get_result', function(req, res) {
+  var query = Rule.findOne()
+  var errorObject = { errors: [] };
+
+  var columns = req.body;
+  var conditions = []
+  var keys = Object.keys(columns);
+  for (var i = 0; i < keys.length; i++) {
+    var condition = {}
+    condition['columns.' + keys[i]] = columns[keys[i]];
+    conditions.push(condition);
+  }
+  query.and(conditions).exec(function(err, rule) {
+    if (err) {
+      res.status(500);
+      errorObject.errors.push("No fue posible obtener las reglas.");
+      res.json(errorObject);
+    } else {
+      if (rule == null) {
+        res.json({});
+      } else {
+        res.json(rule.result);
+      }
+    }
   });
 });
 
